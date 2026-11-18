@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Rafa 70.3</title>
+<title>Rafa Tri Challenge</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,800;1,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -65,7 +65,7 @@ nav a.on{background:var(--ink3);color:var(--text)}
   radial-gradient(700px 400px at -10% 110%, rgba(58,183,255,.18), transparent 60%);}
 .hero .wrap{position:relative;padding:64px 20px 56px;display:grid;grid-template-columns:1.2fr .8fr;gap:40px;align-items:center}
 .kicker{font-weight:700;text-transform:uppercase;letter-spacing:2px;font-size:12px;color:var(--lime)}
-h1.big{font-family:var(--display);font-weight:800;font-style:italic;font-size:clamp(64px,11vw,128px);line-height:.85;margin:10px 0 14px;letter-spacing:-1px}
+h1.big{font-family:var(--display);font-weight:800;font-style:italic;font-size:clamp(44px,8.5vw,100px);line-height:.9;margin:10px 0 14px;letter-spacing:-1px}
 h1.big span{color:var(--accent)}
 .hero p.lead{font-size:17px;color:#c9cfe0;max-width:520px}
 .cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
@@ -237,6 +237,18 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
 .muted{color:var(--muted)}
 .hide{display:none!important}
 @media (prefers-reduced-motion: reduce){ .runner{display:none} }
+@media(max-width:560px){.logo{font-size:18px}}
+.pick label.locked{cursor:not-allowed;opacity:.5}
+.ch .unlock{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+.ramp{display:grid;margin-top:8px}
+.rstep{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.rstep:first-child{border-top:0}
+.rstep .dot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:14px;background:var(--ink3);border:2px solid var(--line)}
+.rstep b{display:block}
+.rstep small{color:var(--muted)}
+.rstep.done .dot{background:var(--ok);border-color:var(--ok);color:var(--ink)}
+.rstep.open .dot{border-color:var(--lime);color:var(--lime)}
+.rstep.lock{opacity:.65}
 </style>
 <script src="config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -245,7 +257,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
 
 <header>
   <div class="wrap hbar">
-    <a href="#inicio" class="logo">RAFA <span>70.3</span></a>
+    <a href="#inicio" class="logo">RAFA <span>TRI</span> CHALLENGE</a>
     <nav id="nav">
       <a href="#inicio">Início</a>
       <a href="#percurso">Percurso</a>
@@ -265,8 +277,8 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
     <div class="wrap">
       <div>
         <div class="kicker">Desafio entre amigos · Porto Alegre</div>
-        <h1 class="big">RAFA<br><span>70.3</span></h1>
-        <p class="lead">1,9 km nadando, 90 km pedalando e 22 km correndo num circuito de 2 km no São Geraldo. Ou encare o Sprint. Escolha seu desafio, complete as voltas e registre cada minuto.</p>
+        <h1 class="big">RAFA <span>TRI</span><br>CHALLENGE</h1>
+        <p class="lead">Comece pelo Sprint e suba degrau por degrau até o Full: Sprint, Olímpico, 70.3 e Full, tudo num circuito de 2 km no São Geraldo. Complete as voltas e registre cada minuto.</p>
         <div class="cta">
           <a class="btn" href="#inscricao">Quero me inscrever</a>
           <a class="btn ghost" href="#percurso">Ver o percurso</a>
@@ -290,14 +302,14 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
   </div>
 
   <div class="wrap" style="padding-top:44px">
-    <h2 class="sec">Escolha seu desafio</h2>
-    <p class="sub">Mesmo circuito de 2 km para bike e corrida. Você só muda o número de voltas.</p>
+    <h2 class="sec">A rampa até o Full</h2>
+    <p class="sub">Mesmo circuito de 2 km para bike e corrida; só muda o número de voltas. Cada nível libera quando você conclui uma prova completa do anterior.</p>
     <div class="grid2" id="chCards"></div>
 
     <h2 class="sec" style="margin-top:56px">Como funciona</h2>
     <p class="sub">Simples, do jeito que um desafio entre amigos tem que ser.</p>
     <div class="grid4 steps" id="steps">
-      <div class="card"><h3>Entre com o Google</h3><p>Sem criar senha: é só entrar com sua conta Google. Depois escolha entre o 70.3 ou o Sprint.</p></div>
+      <div class="card"><h3>Entre com o Google</h3><p>Sem criar senha: é só entrar com sua conta Google. Todo mundo começa no Sprint e libera os próximos níveis ao concluir as provas.</p></div>
       <div class="card"><h3>Faça as voltas</h3><p>Use o contador de voltas do portal para não se perder na volta 37 da bike.</p></div>
       <div class="card"><h3>Registre seus tempos</h3><p>Natação, T1, bike, T2 e corrida. O total é calculado sozinho.</p></div>
       <div class="card"><h3>Poste as fotos</h3><p>Suba fotos do dia e apareça no ranking e na galeria.</p></div>
@@ -329,7 +341,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
     </div>
 
     <div class="card" style="margin-top:24px">
-      <h3>Voltas por desafio</h3>
+      <h3>Voltas por nível</h3>
       <div class="scroll">
       <table class="laps">
         <thead><tr><th>Desafio</th><th>Natação</th><th>Bike</th><th>Voltas bike</th><th>Corrida</th><th>Voltas corrida</th><th>Total</th></tr></thead>
@@ -338,6 +350,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
       </div>
     </div>
     <div class="note" style="margin-top:16px" id="swimNote"></div>
+    <div class="note" style="margin-top:10px">As corridas do 70.3 e do Full usam 10,5 e 21 voltas (21 km e 42 km), cerca de 100 e 200 m abaixo da distância oficial. Combine um trecho extra no fim se quiser a distância exata.</div>
     <div class="note" style="margin-top:10px">O circuito passa por vias públicas abertas ao trânsito. Respeite a sinalização, use capacete na bike e roupa visível. Cada atleta participa por sua conta e risco.</div>
   </div>
 </section>
@@ -381,6 +394,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
     <div class="portal hide" id="portalBody">
       <div class="side">
         <div class="card ch mych" id="myCh"></div>
+        <div class="card" id="rampa"></div>
         <div class="card" id="lapCard"></div>
       </div>
       <div class="side">
@@ -392,6 +406,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
               <button type="button" data-v="treino">Treino</button>
             </div>
           </div>
+          <label class="f">Nível <small>só aparecem os níveis liberados para você</small><select name="nivel"></select></label>
           <div class="row">
             <label class="f">Data<input type="date" name="data" required></label>
             <label class="f">Voltas completadas <small>bike / corrida</small>
@@ -429,8 +444,8 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
 <section class="view" id="v-ranking">
   <div class="wrap">
     <div style="display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap;margin-bottom:24px">
-      <div><h2 class="sec">Ranking</h2><p class="sub" style="margin:0">Melhor prova oficial completa de cada atleta (natação + bike + corrida).</p></div>
-      <div class="seg" id="rkTab" style="margin-left:auto"><button data-v="703" class="on">70.3</button><button data-v="sprint">Sprint</button></div>
+      <div><h2 class="sec">Ranking</h2><p class="sub" style="margin:0">Melhor prova oficial completa de cada atleta em cada nível (natação + bike + corrida).</p></div>
+      <div class="seg" id="rkTab" style="margin-left:auto"></div>
     </div>
     <div class="card scroll" id="rkBox"></div>
     <div class="card" style="margin-top:20px">
@@ -449,7 +464,7 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
   </div>
 </section>
 
-<footer><div class="wrap">Rafa 70.3 · desafio informal entre amigos · Porto Alegre/RS · Sem vínculo com eventos oficiais de triathlon.</div></footer>
+<footer><div class="wrap">Rafa Tri Challenge · desafio informal entre amigos · Porto Alegre/RS · Sem vínculo com eventos oficiais de triathlon.</div></footer>
 
 <!-- modais -->
 <div class="modal" id="mEvent"><form class="card form" id="evForm">
@@ -484,9 +499,12 @@ footer{border-top:1px solid var(--line);padding:26px 0;color:var(--muted);font-s
 <script>
 /* ================= CONFIG ================= */
 const LOOP_KM = 2;
+const LEVELS = ["sprint","olimpico","703","full"];
 const CH = {
-  "703":   {id:"703", nome:"70.3", sub:"Meia distância", swim:1900, bikeKm:90, runKm:22, bikeLaps:45, runLaps:11},
-  "sprint":{id:"sprint", nome:"Sprint", sub:"Rápido e intenso", swim:700, bikeKm:20, runKm:5, bikeLaps:10, runLaps:2.5}
+  "sprint":  {id:"sprint",  ord:1, nome:"Sprint",   sub:"Para começar",       swim:750,  bikeKm:20,  runKm:5,    bikeLaps:10, runLaps:2.5},
+  "olimpico":{id:"olimpico",ord:2, nome:"Olímpico", sub:"Segundo degrau",     swim:1500, bikeKm:40,  runKm:10,   bikeLaps:20, runLaps:5},
+  "703":     {id:"703",     ord:3, nome:"70.3",     sub:"Meia distância",     swim:1900, bikeKm:90,  runKm:21.1, bikeLaps:45, runLaps:10.5},
+  "full":    {id:"full",    ord:4, nome:"Full",     sub:"Distância completa", swim:3800, bikeKm:180, runKm:42.2, bikeLaps:90, runLaps:21}
 };
 const ROUTE = {
   start:"Rossi Fiateci, Av. Polônia, 255 - São Geraldo, Porto Alegre - RS",
@@ -525,8 +543,19 @@ const ICON = {
 /* Modo "supabase" quando config.js tem URL e chave; senão "local" (dados só no navegador). */
 const CFG = window.RAFA_CONFIG || {};
 const S = { mode:null, sb:null, session:null, uid:null, me:null, isOwner:false,
-            athletes:{}, config:{}, loaded:false, local:null };
+            athletes:{}, config:{}, liberacoes:{}, loaded:false, local:null };
 const newId = ()=> (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : uidGen();
+
+/* nível do registro (registros antigos sem nível usam o desafio do atleta) */
+const regLevel = (r,a)=> (r && CH[r.desafio]) ? r.desafio : ((a && CH[a.desafio]) ? a.desafio : "sprint");
+/* maior nível liberado: Sprint sempre; cada prova completa libera o próximo; organizador pode liberar manualmente */
+function maxLevel(uid){
+  if(S.mode==="supabase" && S.isOwner) return LEVELS.length;
+  const a = uid ? S.athletes[uid] : null; let m = 1;
+  ((a && a.registros) || []).forEach(r=>{ if(r.tipo==="prova" && complete(r)) m = Math.max(m, CH[regLevel(r,a)].ord+1); });
+  const lib = S.liberacoes && S.liberacoes[uid]; if(lib && CH[lib]) m = Math.max(m, CH[lib].ord);
+  return Math.min(m, LEVELS.length);
+}
 
 const LS = {
   key:"rafa703_local",
@@ -536,16 +565,18 @@ const LS = {
 
 /* ---- conversão linha do banco <-> objeto da página ---- */
 const fromAthlete = x => ({ nome:x.nome, apelido:x.apelido||"", cidade:x.cidade||"", equipe:x.equipe||"", camiseta:x.camiseta||"M",
-  desafio:x.desafio||"703", termo:x.termo, criadoEm:Date.parse(x.criado_em)||0, registros:[] });
-const fromRegistro = x => ({ id:x.id, ts:Date.parse(x.criado_em)||0, tipo:x.tipo, data:x.data, swim:x.swim, t1:x.t1, bike:x.bike, t2:x.t2, run:x.run,
+  desafio:x.desafio||"sprint", termo:x.termo, criadoEm:Date.parse(x.criado_em)||0, registros:[] });
+const fromRegistro = x => ({ id:x.id, ts:Date.parse(x.criado_em)||0, tipo:x.tipo, desafio:x.desafio||"", data:x.data, swim:x.swim, t1:x.t1, bike:x.bike, t2:x.t2, run:x.run,
   voltasBike:x.voltas_bike==null?null:Number(x.voltas_bike), voltasRun:x.voltas_run==null?null:Number(x.voltas_run), obs:x.obs||"", fotos:Array.isArray(x.fotos)?x.fotos:[] });
-const toRegistro = r => ({ id:r.id, athlete_id:S.uid, tipo:r.tipo, data:r.data, swim:r.swim, t1:r.t1, bike:r.bike, t2:r.t2, run:r.run,
+const toRegistro = r => ({ id:r.id, athlete_id:S.uid, tipo:r.tipo, desafio:r.desafio||"sprint", data:r.data, swim:r.swim, t1:r.t1, bike:r.bike, t2:r.t2, run:r.run,
   voltas_bike:r.voltasBike, voltas_run:r.voltasRun, obs:r.obs||null, fotos:(r.fotos||[]).map(f=>({path:f.path})) });
 
 function ptError(e){
   const m = (e && (e.message||e.error_description)) || String(e||"");
   if(/provider is not enabled|Unsupported provider/i.test(m)) return "O login com Google ainda não foi ativado no Supabase.";
   if(/rate limit/i.test(m)) return "Muitas tentativas. Aguarde alguns minutos.";
+  if(/nivel_bloqueado/i.test(m)) return "Nível bloqueado: conclua uma prova completa do nível anterior.";
+  if(/athletes_desafio_check|registros_desafio_check|'desafio' column|schema cache|liberacoes/i.test(m)) return "O banco precisa ser atualizado: rode o novo schema.sql no Supabase.";
   if(/row-level security/i.test(m)) return "Sem permissão para essa ação.";
   return m || "Algo deu errado.";
 }
@@ -574,6 +605,7 @@ async function initSupabase(){
     .on("postgres_changes",{event:"*",schema:"public",table:"athletes"},reload)
     .on("postgres_changes",{event:"*",schema:"public",table:"registros"},reload)
     .on("postgres_changes",{event:"*",schema:"public",table:"config"},reload)
+    .on("postgres_changes",{event:"*",schema:"public",table:"liberacoes"},reload)
     .subscribe();
   return true;
 }
@@ -591,10 +623,11 @@ async function setSession(session){
   renderAll();
 }
 async function loadAll(){
-  const [a, r, c] = await Promise.all([
+  const [a, r, c, l] = await Promise.all([
     S.sb.from("athletes").select("*"),
     S.sb.from("registros").select("*").order("data",{ascending:false}).limit(5000),
-    S.sb.from("config").select("*").eq("id",1).maybeSingle()
+    S.sb.from("config").select("*").eq("id",1).maybeSingle(),
+    S.sb.from("liberacoes").select("*")
   ]);
   const err = a.error || r.error;
   if(err){ showBanner("Não foi possível carregar os dados: "+ptError(err)); return; }
@@ -602,6 +635,7 @@ async function loadAll(){
   a.data.forEach(x=>{ o[x.id]=fromAthlete(x); });
   r.data.forEach(x=>{ const at=o[x.athlete_id]; if(at) at.registros.push(fromRegistro(x)); });
   S.athletes=o;
+  S.liberacoes={}; ((l && l.data) || []).forEach(x=>{ S.liberacoes[x.athlete_id]=x.ate; });
   const cd=c.data||{};
   S.config={ data:cd.data||"", hora:(cd.hora||"").slice(0,5), localNatacao:cd.local_natacao||"", recado:cd.recado||"" };
   S.loaded=true; hideBanner(); renderAll();
@@ -725,19 +759,32 @@ function openLogin(){
 /* ================= RENDER: challenges ================= */
 function chCard(c){
   const tot = (c.swim/1000 + c.bikeKm + c.runKm);
+  const prev = c.ord>1 ? CH[LEVELS[c.ord-2]] : null;
   return `<div class="card ch ${c.id==="sprint"?"sprint":""}">
-    <span class="tag">${c.id==="703"?"Desafio principal":"Para começar"}</span>
+    <span class="tag">Nível ${c.ord}</span>
     <h3 class="t">${c.nome}</h3>
     <div class="tot">${esc(c.sub)} · ${fmtN(tot.toFixed(1))} km no total</div>
     <div class="leg"><div class="ic swim">${ICON.swim}</div><div><b>Natação</b><small>${c.swim.toLocaleString("pt-BR")} m</small></div><div class="v">${fmtN(c.swim/1000)}<small>km</small></div></div>
-    <div class="leg"><div class="ic bike">${ICON.bike}</div><div><b>Bike</b><small>${c.bikeKm} km no circuito</small></div><div class="v">${fmtN(c.bikeLaps)}<small>voltas</small></div></div>
-    <div class="leg"><div class="ic run">${ICON.run}</div><div><b>Corrida</b><small>${c.runKm} km no circuito</small></div><div class="v">${fmtN(c.runLaps)}<small>voltas</small></div></div>
+    <div class="leg"><div class="ic bike">${ICON.bike}</div><div><b>Bike</b><small>${fmtN(c.bikeKm)} km no circuito</small></div><div class="v">${fmtN(c.bikeLaps)}<small>voltas</small></div></div>
+    <div class="leg"><div class="ic run">${ICON.run}</div><div><b>Corrida</b><small>${fmtN(c.runKm)} km no circuito</small></div><div class="v">${fmtN(c.runLaps)}<small>voltas</small></div></div>
+    <div class="unlock">${prev ? "🔒 Libera ao concluir uma prova completa do "+prev.nome : "Aberto para todos"}</div>
   </div>`;
 }
+function renderPick(){
+  const box=$("#pickCh"); const cur=(box.querySelector("input:checked")||{}).value;
+  const max=maxLevel(S.uid); const me=S.uid ? S.athletes[S.uid] : null;
+  let sel = (cur && CH[cur] && CH[cur].ord<=max) ? cur : ((me && CH[me.desafio] && CH[me.desafio].ord<=max) ? me.desafio : "sprint");
+  box.innerHTML = LEVELS.map(id=>{
+    const c=CH[id]; const lock=c.ord>max; const prev=c.ord>1?CH[LEVELS[c.ord-2]]:null;
+    const info = lock ? "Conclua uma prova completa do "+prev.nome+" para liberar"
+      : `${fmtN(c.swim/1000)} km · ${fmtN(c.bikeKm)} km (${fmtN(c.bikeLaps)} v) · ${fmtN(c.runKm)} km (${fmtN(c.runLaps)} v)`;
+    return `<label class="${lock?"locked":""}"><input type="radio" name="desafio" value="${c.id}" ${lock?"disabled":""} ${c.id===sel?"checked":""}><div><b>${c.nome}${lock?" 🔒":""}</b><small>${info}</small></div></label>`;
+  }).join("");
+}
 function renderStatic(){
-  $("#chCards").innerHTML = chCard(CH["703"]) + chCard(CH.sprint);
-  $("#pickCh").innerHTML = Object.values(CH).map(c=>`<label><input type="radio" name="desafio" value="${c.id}" ${c.id==="703"?"checked":""}><div><b>${c.nome}</b><small>${fmtN(c.swim/1000)} km · ${c.bikeKm} km (${fmtN(c.bikeLaps)} v) · ${c.runKm} km (${fmtN(c.runLaps)} v)</small></div></label>`).join("");
-  $("#lapsTable").innerHTML = Object.values(CH).map(c=>`<tr><td><b>${c.nome}</b></td><td class="num">${c.swim.toLocaleString("pt-BR")} m</td><td class="num">${c.bikeKm} km</td><td class="num">${fmtN(c.bikeLaps)}</td><td class="num">${c.runKm} km</td><td class="num">${fmtN(c.runLaps)}</td><td class="num">${fmtN((c.swim/1000+c.bikeKm+c.runKm).toFixed(1))} km</td></tr>`).join("");
+  $("#chCards").innerHTML = LEVELS.map(id=>chCard(CH[id])).join("");
+  renderPick();
+  $("#lapsTable").innerHTML = LEVELS.map(id=>{ const c=CH[id]; return `<tr><td><b>${c.nome}</b></td><td class="num">${c.swim.toLocaleString("pt-BR")} m</td><td class="num">${fmtN(c.bikeKm)} km</td><td class="num">${fmtN(c.bikeLaps)}</td><td class="num">${fmtN(c.runKm)} km</td><td class="num">${fmtN(c.runLaps)}</td><td class="num">${fmtN((c.swim/1000+c.bikeKm+c.runKm).toFixed(1))} km</td></tr>`; }).join("");
   const q = new URLSearchParams({api:"1",origin:ROUTE.start,destination:ROUTE.start,waypoints:ROUTE.w1+"|"+ROUTE.w2,travelmode:"walking"});
   $("#gmaps").href = "https://www.google.com/maps/dir/?"+q.toString();
   $("#map").innerHTML = mapSVG();
@@ -806,7 +853,7 @@ function tick(){
 setInterval(tick,30000);
 function renderPercurso(){
   const c=S.config||{};
-  $("#swimNote").textContent = "Natação ("+"1.900 m no 70.3 / 700 m no Sprint): " + (c.localNatacao ? c.localNatacao : "local a definir pelo organizador.");
+  $("#swimNote").textContent = "Natação ("+LEVELS.map(id=>CH[id].swim.toLocaleString("pt-BR")+" m no "+CH[id].nome).join(", ")+"): " + (c.localNatacao ? c.localNatacao : "local a definir pelo organizador.");
 }
 
 /* ================= RENDER: inscrição ================= */
@@ -822,7 +869,7 @@ function renderInscricao(){
   $("#insGate").innerHTML = g;
   $("#insForm").classList.toggle("hide", !!g);
   if(!g){
-    const f=$("#insForm");
+    const f=$("#insForm"); renderPick();
     if(me && !f.dataset.filled){
       ["nome","apelido","cidade","equipe","camiseta"].forEach(k=>{ if(me[k]!=null) f[k].value=me[k]; });
       const r=f.querySelector(`[name=desafio][value="${me.desafio}"]`); if(r) r.checked=true;
@@ -836,7 +883,7 @@ function renderInscricao(){
   }
   const list = Object.entries(S.athletes).sort((a,b)=>(a[1].criadoEm||0)-(b[1].criadoEm||0));
   $("#insCount").textContent = "("+list.length+")";
-  $("#insList").innerHTML = list.length ? list.map(([id,a])=>`<span class="chip">${esc(dispName(a))} <small>· ${a.desafio==="sprint"?"Sprint":"70.3"}</small></span>`).join("") : `<span class="muted">Ninguém ainda. Seja o primeiro!</span>`;
+  $("#insList").innerHTML = list.length ? list.map(([id,a])=>`<span class="chip">${esc(dispName(a))} <small>· ${(CH[a.desafio]||CH.sprint).nome}</small></span>`).join("") : `<span class="muted">Ninguém ainda. Seja o primeiro!</span>`;
   $("#cdN").textContent = list.length;
 }
 $("#insForm").addEventListener("submit", async e=>{
@@ -844,9 +891,12 @@ $("#insForm").addEventListener("submit", async e=>{
   const f=e.target; const prev = S.athletes[S.uid] || {};
   const doc = { nome:f.nome.value.trim(), apelido:f.apelido.value.trim(), cidade:f.cidade.value.trim(),
     equipe:f.equipe.value.trim(), camiseta:f.camiseta.value, desafio:f.desafio.value, termo:true };
+  if(!doc.desafio){ toast("Escolha um desafio."); return; }
+  if(CH[doc.desafio].ord>maxLevel(S.uid)){ toast("Esse nível ainda está bloqueado."); return; }
   const btn=$("#insBtn"); btn.disabled=true;
   const ok = await saveProfile(doc); btn.disabled=false;
-  if(ok){ toast(prev.criadoEm ? "Inscrição atualizada!" : "Inscrição confirmada! Bem-vindo ao Rafa 70.3 🎉"); location.hash="#portal"; }
+  if(ok){ try{ $("#regForm").nivel.value=doc.desafio; }catch(e){}
+    toast(prev.criadoEm ? "Inscrição atualizada!" : "Inscrição confirmada! Bem-vindo ao Rafa Tri Challenge 🎉"); location.hash="#portal"; }
 });
 
 /* ================= RENDER: portal ================= */
@@ -859,9 +909,9 @@ function renderPortal(){
   $("#portalGate").innerHTML = gate;
   $("#portalBody").classList.toggle("hide", !!gate);
   if(gate) return;
-  const c = CH[me.desafio] || CH["703"];
+  const c = CH[me.desafio] || CH.sprint;
   const regs = (me.registros||[]).slice().sort((a,b)=>(b.data||"").localeCompare(a.data||"") || b.ts-a.ts);
-  const provas = regs.filter(r=>r.tipo==="prova" && complete(r));
+  const provas = regs.filter(r=>r.tipo==="prova" && complete(r) && regLevel(r,me)===c.id);
   const best = provas.length ? Math.min(...provas.map(total)) : null;
   const kmBike = regs.reduce((a,r)=>a+(+r.voltasBike||0),0)*LOOP_KM;
   const kmRun = regs.reduce((a,r)=>a+(+r.voltasRun||0),0)*LOOP_KM;
@@ -870,8 +920,8 @@ function renderPortal(){
   $("#myCh").className = "card ch mych "+(c.id==="sprint"?"sprint":"");
   $("#myCh").innerHTML = `<span class="tag">Seu desafio</span><h3 class="t">${c.nome}</h3>
     <div class="leg"><div class="ic swim">${ICON.swim}</div><div><b>Natação</b><small>${c.swim.toLocaleString("pt-BR")} m</small></div><div class="v">${fmtN(c.swim/1000)}<small>km</small></div></div>
-    <div class="leg"><div class="ic bike">${ICON.bike}</div><div><b>Bike</b><small>${c.bikeKm} km</small></div><div class="v">${fmtN(c.bikeLaps)}<small>voltas</small></div></div>
-    <div class="leg"><div class="ic run">${ICON.run}</div><div><b>Corrida</b><small>${c.runKm} km</small></div><div class="v">${fmtN(c.runLaps)}<small>voltas</small></div></div>
+    <div class="leg"><div class="ic bike">${ICON.bike}</div><div><b>Bike</b><small>${fmtN(c.bikeKm)} km</small></div><div class="v">${fmtN(c.bikeLaps)}<small>voltas</small></div></div>
+    <div class="leg"><div class="ic run">${ICON.run}</div><div><b>Corrida</b><small>${fmtN(c.runKm)} km</small></div><div class="v">${fmtN(c.runLaps)}<small>voltas</small></div></div>
     <div class="stats">
       <div class="stat"><b>${best!=null?fmtT(best):"–"}</b><small>melhor prova</small></div>
       <div class="stat"><b>${pos?pos+"º":"–"}</b><small>no ranking ${c.nome}</small></div>
@@ -879,7 +929,7 @@ function renderPortal(){
       <div class="stat"><b>${fmtN(kmBike+kmRun)}</b><small>km no circuito</small></div>
     </div>
     <div style="margin-top:14px"><a href="#inscricao" class="linkbtn">Trocar desafio / editar dados</a></div>`;
-  renderLap(c);
+  renderLap(c); renderRampa(); renderNivelSelect();
   const f=$("#regForm"); if(!f.data.value) f.data.value=today();
   renderPendingPhotos();
   $("#myRegs").innerHTML = regs.length ? regs.map(r=>`<div class="reg">
@@ -891,6 +941,23 @@ function renderPortal(){
       ${(r.fotos||[]).length?`<div class="ph">${r.fotos.map(p=>`<img src="${esc(photoSrc(p))}" alt="" data-zoom>`).join("")}</div>`:""}
       <div style="margin-top:6px;display:flex;gap:12px"><button class="linkbtn" data-edit="${esc(r.id)}">editar</button><button class="linkbtn" data-del="${esc(r.id)}">excluir</button></div>
     </div>`).join("") : `<div class="empty">Nenhum registro ainda. Salve seu primeiro treino ou a prova oficial.</div>`;
+}
+function renderRampa(){
+  const me=S.athletes[S.uid]; if(!me) return;
+  const max=maxLevel(S.uid); const done={};
+  (me.registros||[]).forEach(r=>{ if(r.tipo==="prova" && complete(r)){ const l=regLevel(r,me); const t=total(r); if(done[l]==null || t<done[l]) done[l]=t; } });
+  $("#rampa").innerHTML = `<h3 style="margin:0">Sua rampa até o Full</h3><div class="ramp">${LEVELS.map(id=>{
+    const c=CH[id]; const st = done[id]!=null ? "done" : (c.ord<=max ? "open" : "lock");
+    const info = st==="done" ? "melhor prova "+fmtT(done[id]) : st==="open" ? "liberado" : "conclua o "+CH[LEVELS[c.ord-2]].nome+" para liberar";
+    return `<div class="rstep ${st}"><span class="dot">${st==="done"?"✓":st==="lock"?"🔒":c.ord}</span><div><b>${c.nome}</b><small>${info}</small></div></div>`;
+  }).join("")}</div>`;
+}
+function renderNivelSelect(){
+  const f=$("#regForm"), sel=f.nivel; const me=S.athletes[S.uid]; const max=maxLevel(S.uid);
+  const ed = editingId && me ? (me.registros||[]).find(x=>x.id===editingId) : null; const extra = ed ? regLevel(ed,me) : null;
+  const cur=sel.value;
+  sel.innerHTML = LEVELS.filter(id=>CH[id].ord<=max || id===extra).map(id=>`<option value="${id}">${CH[id].nome}</option>`).join("");
+  sel.value = (cur && [...sel.options].some(o=>o.value===cur)) ? cur : ((me && [...sel.options].some(o=>o.value===me.desafio)) ? me.desafio : "sprint");
 }
 function renderPendingPhotos(){
   const box=$("#regPhotos"); $$(".th",box).forEach(n=>n.remove());
@@ -911,7 +978,7 @@ $("#regForm").addEventListener("input", ()=>{
   $("#regTotal").textContent = t ? fmtT(t) : "–";
 });
 $("#regForm").addEventListener("submit", async e=>{
-  e.preventDefault(); const f=e.target; const r={ id: editingId || newId(), ts: Date.now(), tipo:regTipo, data:f.data.value };
+  e.preventDefault(); const f=e.target; const r={ id: editingId || newId(), ts: Date.now(), tipo:regTipo, data:f.data.value, desafio:f.nivel.value||"sprint" };
   for(const k of ["swim","t1","bike","t2","run"]){ const v=parseT(f[k].value); if(Number.isNaN(v)){ toast("Tempo inválido em "+k.toUpperCase()+". Use h:mm:ss."); f[k].focus(); return; } r[k]=v; }
   r.voltasBike = f.voltasBike.value ? +f.voltasBike.value : null;
   r.voltasRun = f.voltasRun.value ? +f.voltasRun.value : null;
@@ -919,7 +986,7 @@ $("#regForm").addEventListener("submit", async e=>{
   if(!["swim","t1","bike","t2","run"].some(k=>r[k]!=null) && !r.fotos.length && !r.obs){ toast("Preencha ao menos um tempo, foto ou observação."); return; }
   if(!r.data){ toast("Informe a data."); return; }
   const btn=$("#regBtn"); btn.disabled=true; const ok=await saveRegistro(r); btn.disabled=false;
-  if(ok){ toast(editingId?"Registro atualizado!":"Registro salvo! 💪"); f.reset(); f.data.value=today(); pendingPhotos=[]; editingId=null; $("#regBtn").textContent="Salvar registro"; $("#regTotal").textContent="–"; renderPortal(); }
+  if(ok){ toast(editingId?"Registro atualizado!":"Registro salvo! 💪"); f.reset(); f.data.value=today(); f.nivel.value=(S.athletes[S.uid]||{}).desafio||"sprint"; pendingPhotos=[]; editingId=null; $("#regBtn").textContent="Salvar registro"; $("#regTotal").textContent="–"; renderPortal(); }
 });
 $("#myRegs").addEventListener("click", async e=>{
   const del=e.target.closest("[data-del]"), ed=e.target.closest("[data-edit]");
@@ -932,6 +999,7 @@ $("#myRegs").addEventListener("click", async e=>{
     const f=$("#regForm"); editingId=r.id; f.data.value=r.data||today();
     ["swim","t1","bike","t2","run"].forEach(k=>f[k].value = r[k]!=null?fmtT(r[k]):"");
     f.voltasBike.value=r.voltasBike??""; f.voltasRun.value=r.voltasRun??""; f.obs.value=r.obs||"";
+    { const lv=regLevel(r,S.athletes[S.uid]); if(![...f.nivel.options].some(o=>o.value===lv)) f.nivel.add(new Option(CH[lv].nome,lv)); f.nivel.value=lv; }
     regTipo=r.tipo; $$("#regTipo button").forEach(x=>x.classList.toggle("on",x.dataset.v===regTipo));
     pendingPhotos=(r.fotos||[]).slice(); renderPendingPhotos(); f.dispatchEvent(new Event("input"));
     $("#regBtn").textContent="Atualizar registro"; f.scrollIntoView({behavior:"smooth",block:"start"});
@@ -967,7 +1035,7 @@ function renderLap(c){
   if(lap.start && !lap.stopped) lapTimer=setInterval(()=>{ const c2=$("#lapClock"); if(c2) c2.textContent=fmtT((Date.now()-lap.start)/1000); },1000);
 }
 $("#lapCard").addEventListener("click", e=>{
-  const me=S.athletes[S.uid]; const c=CH[(me&&me.desafio)||"703"];
+  const me=S.athletes[S.uid]; const c=CH[(me&&me.desafio)||"sprint"];
   const sp=e.target.closest("#lapSport button");
   if(sp){ if(lap.start && !lap.stopped){ toast("Finalize ou zere antes de trocar."); return; } lap.esporte=sp.dataset.v; saveLap(); renderLap(c); return; }
   const b=e.target.closest("[data-lap]"); if(!b) return;
@@ -986,12 +1054,11 @@ $("#lapCard").addEventListener("click", e=>{
 });
 
 /* ================= RANKING ================= */
-let rkCat="703";
+let rkCat="sprint";
 function rankingList(cat){
   const out=[];
   for(const [id,a] of Object.entries(S.athletes)){
-    if((a.desafio||"703")!==cat) continue;
-    const ps=(a.registros||[]).filter(r=>r.tipo==="prova" && complete(r));
+    const ps=(a.registros||[]).filter(r=>r.tipo==="prova" && complete(r) && regLevel(r,a)===cat);
     if(!ps.length) continue;
     const best=ps.reduce((m,r)=>total(r)<total(m)?r:m);
     out.push({id,a,r:best,t:total(best)});
@@ -1000,13 +1067,14 @@ function rankingList(cat){
 }
 function rankOf(uid,cat){ const i=rankingList(cat).findIndex(x=>x.id===uid); return i>=0?i+1:null; }
 function renderRanking(){
+  $("#rkTab").innerHTML = LEVELS.map(id=>`<button data-v="${id}" class="${id===rkCat?"on":""}">${CH[id].nome}</button>`).join("");
   const list=rankingList(rkCat);
   $("#rkBox").innerHTML = list.length ? `<table class="rk"><thead><tr><th>#</th><th>Atleta</th><th>Natação</th><th>T1</th><th>Bike</th><th>T2</th><th>Corrida</th><th>Total</th><th>Data</th></tr></thead><tbody>${
     list.map((x,i)=>`<tr><td class="pos">${i+1}</td><td class="nm"><b>${esc(dispName(x.a))}${x.id===S.uid?' <span class="pill prova">você</span>':""}</b><small>${esc([x.a.cidade,x.a.equipe].filter(Boolean).join(" · "))}</small></td>
       <td>${fmtT(x.r.swim)}</td><td class="muted">${fmtT(x.r.t1)}</td><td>${fmtT(x.r.bike)}</td><td class="muted">${fmtT(x.r.t2)}</td><td>${fmtT(x.r.run)}</td><td class="tt">${fmtT(x.t)}</td><td class="muted">${fmtDate(x.r.data)}</td></tr>`).join("")
   }</tbody></table>` : `<div class="empty">Ninguém completou a prova ${CH[rkCat].nome} ainda. O pódio está vazio esperando por você.</div>`;
   const ranked=new Set(list.map(x=>x.id));
-  const pend=Object.entries(S.athletes).filter(([id,a])=>(a.desafio||"703")===rkCat && !ranked.has(id));
+  const pend=Object.entries(S.athletes).filter(([id,a])=>(a.desafio||"sprint")===rkCat && !ranked.has(id));
   $("#rkPend").innerHTML = pend.length ? pend.map(([id,a])=>`<span class="chip">${esc(dispName(a))} <small>· ${(a.registros||[]).filter(r=>r.tipo==="treino").length} treinos</small></span>`).join("") : `<span class="muted">Todos os inscritos já têm prova registrada.</span>`;
 }
 $("#rkTab").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; rkCat=b.dataset.v; $$("#rkTab button").forEach(x=>x.classList.toggle("on",x===b)); renderRanking(); });
