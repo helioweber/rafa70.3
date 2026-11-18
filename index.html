@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rafa 70.3 — Portal de Triatlo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans antialiased">
+
+  <!-- TELA DE LOGIN / CADASTRO -->
+  <div id="auth-screen" class="min-h-screen flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl p-8 shadow-2xl">
+      <div class="text-center mb-8">
+        <span class="inline-block px-3 py-1 text-xs font-semibold tracking-wider uppercase bg-emerald-500/10 text-emerald-400 rounded-full mb-3">
+          Portal dos Amigos
+        </span>
+        <h1 class="text-3xl font-extrabold tracking-tight text-white">Rafa <span class="text-emerald-400">70.3</span></h1>
+        <p class="text-slate-400 text-sm mt-2">Registre seus tempos de prova e compare com a galera.</p>
+      </div>
+
+      <div class="flex bg-slate-800/60 p-1 rounded-xl mb-6">
+        <button id="tab-login" onclick="switchAuthTab('login')" class="flex-1 py-2 text-sm font-medium rounded-lg bg-slate-700 text-white transition">Entrar</button>
+        <button id="tab-signup" onclick="switchAuthTab('signup')" class="flex-1 py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white transition">Criar Conta</button>
+      </div>
+
+      <form id="auth-form" class="space-y-4">
+        <div id="name-field" class="hidden">
+          <label class="block text-xs font-medium text-slate-400 mb-1">Seu Nome / Apelido</label>
+          <input type="text" id="auth-name" placeholder="Ex: Rafa" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">E-mail</label>
+          <input type="email" id="auth-email" required placeholder="seu@email.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500" />
+        </div>
+        <div>
+          <label class="block text-xs font-medium text-slate-400 mb-1">Senha</label>
+          <input type="password" id="auth-password" required minlength="6" placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500" />
+        </div>
+
+        <p id="auth-error" class="text-rose-400 text-xs hidden"></p>
+        <p id="auth-success" class="text-emerald-400 text-xs hidden"></p>
+
+        <button type="submit" id="auth-submit-btn" class="w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-3 rounded-xl transition cursor-pointer">
+          Entrar no Portal
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- PORTAL PRINCIPAL (LOGADO) -->
+  <div id="app-screen" class="hidden">
+    <!-- Navbar -->
+    <header class="border-b border-slate-800 bg-slate-900/70 backdrop-blur sticky top-0 z-30">
+      <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <h1 class="text-xl font-extrabold tracking-tight text-white">Rafa <span class="text-emerald-400">70.3</span></h1>
+          <span class="hidden sm:inline-block text-xs text-slate-500 border-l border-slate-800 pl-3">Triatlo & Segmentos</span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="user-greeting" class="text-sm text-slate-300 hidden sm:inline"></span>
+          <button onclick="openModal()" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-sm font-bold px-4 py-2 rounded-xl transition cursor-pointer">
+            + Novo Tempo
+          </button>
+          <button onclick="logout()" class="text-xs text-slate-400 hover:text-white border border-slate-800 px-3 py-2 rounded-xl transition cursor-pointer">
+            Sair
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-8">
+      <!-- Abas de Modalidades -->
+      <div class="flex flex-wrap gap-2" id="category-tabs">
+        <button data-cat="70.3" onclick="selectCategory('70.3')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-500 text-slate-950 transition cursor-pointer">70.3 (Half)</button>
+        <button data-cat="sprint" onclick="selectCategory('sprint')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition cursor-pointer">Sprint</button>
+        <button data-cat="olympic" onclick="selectCategory('olympic')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition cursor-pointer">Olímpico</button>
+        <button data-cat="140.6" onclick="selectCategory('140.6')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition cursor-pointer">140.6 (Full)</button>
+        <button data-cat="swim" onclick="selectCategory('swim')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition cursor-pointer">Só Natação</button>
+        <button data-cat="bike" onclick="selectCategory('bike')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition cursor-pointer">Só Bike</button>
+        <button data-cat="run" onclick="selectCategory('run')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition cursor-pointer">Só Corrida</button>
+      </div>
+
+      <!-- Info da Distância + KPIs -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+          <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Distância Padrão</p>
+          <p id="kpi-distance" class="text-lg font-bold text-white mt-1">1.9km • 90km • 21.1km</p>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+          <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Seu Melhor Tempo (PR)</p>
+          <p id="kpi-my-pr" class="text-2xl font-extrabold text-emerald-400 mt-1">--:--:--</p>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5">
+          <p class="text-xs font-medium text-slate-400 uppercase tracking-wider">Líder da Categoria</p>
+          <p id="kpi-leader" class="text-lg font-bold text-amber-400 mt-1">--</p>
+        </div>
+      </div>
+
+      <!-- Tabela de Tempos -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+          <h2 class="font-bold text-white">Tempos Registrados</h2>
+          <span id="records-count" class="text-xs text-slate-400">0 registros</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-sm">
+            <thead class="bg-slate-950/60 text-slate-400 text-xs uppercase">
+              <tr>
+                <th class="px-6 py-3">#</th>
+                <th class="px-6 py-3">Atleta</th>
+                <th class="px-6 py-3">Prova / Treino</th>
+                <th class="px-6 py-3">Data</th>
+                <th class="px-6 py-3">Natação</th>
+                <th class="px-6 py-3">T1</th>
+                <th class="px-6 py-3">Bike</th>
+                <th class="px-6 py-3">T2</th>
+                <th class="px-6 py-3">Corrida</th>
+                <th class="px-6 py-3">Total</th>
+                <th class="px-6 py-3 text-right">Ação</th>
+              </tr>
+            </thead>
+            <tbody id="records-body" class="divide-y divide-slate-800/70">
+              <tr><td colspan="11" class="px-6 py-8 text-center text-slate-500">Carregando tempos...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL ADICIONAR TEMPO -->
+  <div id="record-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg p-6 shadow-2xl">
+      <div class="flex items-center justify-between mb-5">
+        <h3 class="text-lg font-bold text-white">Registrar Novo Tempo</h3>
+        <button onclick="closeModal()" class="text-slate-400 hover:text-white text-xl cursor-pointer">&times;</button>
+      </div>
+
+      <form id="record-form" class="space-y-4">
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Categoria</label>
+            <select id="rec-category" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white">
+              <option value="70.3">70.3 (Half)</option>
+              <option value="sprint">Sprint</option>
+              <option value="olympic">Olímpico</option>
+              <option value="140.6">140.6 (Full)</option>
+              <option value="swim">Só Natação</option>
+              <option value="bike">Só Bike</option>
+              <option value="run">Só Corrida</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Data</label>
+            <input type="date" id="rec-date" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs text-slate-400 mb-1">Nome da Prova / Treino</label>
+          <input type="text" id="rec-title" required placeholder="Ex: Simulado Domingo / Prova Santos" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white" />
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Natação (HH:MM:SS)</label>
+            <input type="text" id="rec-swim" placeholder="00:35:00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">T1 (MM:SS)</label>
+            <input type="text" id="rec-t1" placeholder="03:30" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Bike (HH:MM:SS)</label>
+            <input type="text" id="rec-bike" placeholder="02:45:00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">T2 (MM:SS)</label>
+            <input type="text" id="rec-t2" placeholder="02:30" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white" />
+          </div>
+          <div>
+            <label class="block text-xs text-slate-400 mb-1">Corrida (HH:MM:SS)</label>
+            <input type="text" id="rec-run" placeholder="01:50:00" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white" />
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-2">
+          <button type="button" onclick="closeModal()" class="px-4 py-2 text-sm text-slate-400 hover:text-white cursor-pointer">Cancelar</button>
+          <button type="submit" class="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold px-5 py-2 rounded-xl text-sm transition cursor-pointer">Salvar Tempo</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // 1. CONFIGURAÇÃO DO SUPABASE
+    const SUPABASE_URL = 'https://hwibjhibpxvbtkusxrtu.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_1hS-O44BQ3qdG0HIxNReDw_ZDGkjjS5';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let currentUser = null;
+    let authMode = 'login';
+    let activeCategory = '70.3';
+
+    const DISTANCE_LABELS = {
+      '70.3': '1.9km Natação • 90km Bike • 21.1km Corrida',
+      'sprint': '750m Natação • 20km Bike • 5km Corrida',
+      'olympic': '1.5km Natação • 40km Bike • 10km Corrida',
+      '140.6': '3.8km Natação • 180km Bike • 42.2km Corrida',
+      'swim': 'Segmento Individual — Natação',
+      'bike': 'Segmento Individual — Ciclismo',
+      'run': 'Segmento Individual — Corrida'
+    };
+
+    // 2. UTILITÁRIOS DE TEMPO
+    function parseTimeToSeconds(str) {
+      if (!str || !str.trim()) return 0;
+      const parts = str.trim().split(':').map(Number);
+      if (parts.some(isNaN)) return 0;
+      if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+      if (parts.length === 2) return parts[0] * 60 + parts[1];
+      if (parts.length === 1) return parts[0];
+      return 0;
+    }
+
+    function formatSeconds(sec) {
+      if (!sec || sec <= 0) return '--';
+      const h = Math.floor(sec / 3600);
+      const m = Math.floor((sec % 3600) / 60);
+      const s = sec % 60;
+      return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
+    }
+
+    // 3. AUTENTICAÇÃO
+    function switchAuthTab(mode) {
+      authMode = mode;
+      document.getElementById('name-field').classList.toggle('hidden', mode === 'login');
+      document.getElementById('tab-login').className = mode === 'login'
+        ? 'flex-1 py-2 text-sm font-medium rounded-lg bg-slate-700 text-white transition'
+        : 'flex-1 py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white transition';
+      document.getElementById('tab-signup').className = mode === 'signup'
+        ? 'flex-1 py-2 text-sm font-medium rounded-lg bg-slate-700 text-white transition'
+        : 'flex-1 py-2 text-sm font-medium rounded-lg text-slate-400 hover:text-white transition';
+      document.getElementById('auth-submit-btn').textContent = mode === 'login' ? 'Entrar no Portal' : 'Criar Conta';
+      document.getElementById('auth-error').classList.add('hidden');
+      document.getElementById('auth-success').classList.add('hidden');
+    }
+
+    document.getElementById('auth-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('auth-email').value;
+      const password = document.getElementById('auth-password').value;
+      const name = document.getElementById('auth-name').value;
+      const errEl = document.getElementById('auth-error');
+      const okEl = document.getElementById('auth-success');
+      errEl.classList.add('hidden');
+      okEl.classList.add('hidden');
+
+      if (authMode === 'login') {
+        const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        if (error) {
+          errEl.textContent = error.message;
+          errEl.classList.remove('hidden');
+        }
+      } else {
+        const { data, error } = await supabaseClient.auth.signUp({
+          email,
+          password,
+          options: { data: { name: name || email.split('@')[0] } }
+        });
+        if (error) {
+          errEl.textContent = error.message;
+          errEl.classList.remove('hidden');
+        } else if (data.user && !data.session) {
+          okEl.textContent = 'Conta criada! Verifique seu e-mail para confirmar o cadastro.';
+          okEl.classList.remove('hidden');
+        }
+      }
+    });
+
+    async function logout() {
+      await supabaseClient.auth.signOut();
+    }
+
+    // 4. PORTAL E DADOS
+    function selectCategory(cat) {
+      activeCategory = cat;
+      document.querySelectorAll('.cat-btn').forEach(btn => {
+        const isActive = btn.dataset.cat === cat;
+        btn.className = isActive
+          ? 'cat-btn px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-500 text-slate-950 transition cursor-pointer'
+          : 'cat-btn px-4 py-2 rounded-xl text-sm font-semibold bg-slate-900 text-slate-400 hover:text-white border border-slate-800 transition cursor-pointer';
+      });
+      document.getElementById('kpi-distance').textContent = DISTANCE_LABELS[cat];
+      loadRecords();
+    }
+
+    async function loadRecords() {
+      const tbody = document.getElementById('records-body');
+      tbody.innerHTML = '<tr><td colspan="11" class="px-6 py-8 text-center text-slate-500">Carregando...</td></tr>';
+
+      const { data, error } = await supabaseClient
+        .from('race_records')
+        .select('*, profiles(name)')
+        .eq('category', activeCategory)
+        .order('total_seconds', { ascending: true });
+
+      if (error) {
+        tbody.innerHTML = `<tr><td colspan="11" class="px-6 py-8 text-center text-rose-400">Erro ao carregar: ${error.message}</td></tr>`;
+        return;
+      }
+
+      document.getElementById('records-count').textContent = `${data.length} registro(s)`;
+
+      // KPIs
+      const myRecords = data.filter(r => r.user_id === currentUser.id && r.total_seconds > 0);
+      document.getElementById('kpi-my-pr').textContent = myRecords.length ? formatSeconds(myRecords[0].total_seconds) : '--:--:--';
+      document.getElementById('kpi-leader').textContent = data.length && data[0].total_seconds > 0
+        ? `${data[0].profiles?.name || 'Atleta'} (${formatSeconds(data[0].total_seconds)})`
+        : '--';
+
+      if (!data.length) {
+        tbody.innerHTML = '<tr><td colspan="11" class="px-6 py-8 text-center text-slate-500">Nenhum tempo registrado nesta categoria ainda. Seja o primeiro!</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = data.map((r, idx) => {
+        const isMine = r.user_id === currentUser.id;
+        return `
+          <tr class="hover:bg-slate-800/40 transition ${isMine ? 'bg-emerald-500/5' : ''}">
+            <td class="px-6 py-3 font-bold text-slate-400">${idx + 1}º</td>
+            <td class="px-6 py-3 font-medium text-white">${r.profiles?.name || 'Atleta'} ${isMine ? '<span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded ml-1">Você</span>' : ''}</td>
+            <td class="px-6 py-3 text-slate-300">${r.title}</td>
+            <td class="px-6 py-3 text-slate-400">${new Date(r.race_date + 'T00:00:00').toLocaleDateString('pt-BR')}</td>
+            <td class="px-6 py-3 text-slate-300 font-mono text-xs">${formatSeconds(r.swim_seconds)}</td>
+            <td class="px-6 py-3 text-slate-400 font-mono text-xs">${formatSeconds(r.t1_seconds)}</td>
+            <td class="px-6 py-3 text-slate-300 font-mono text-xs">${formatSeconds(r.bike_seconds)}</td>
+            <td class="px-6 py-3 text-slate-400 font-mono text-xs">${formatSeconds(r.t2_seconds)}</td>
+            <td class="px-6 py-3 text-slate-300 font-mono text-xs">${formatSeconds(r.run_seconds)}</td>
+            <td class="px-6 py-3 font-bold text-emerald-400 font-mono">${formatSeconds(r.total_seconds)}</td>
+            <td class="px-6 py-3 text-right">
+              ${isMine ? `<button onclick="deleteRecord('${r.id}')" class="text-xs text-rose-400 hover:text-rose-300 cursor-pointer">Excluir</button>` : '-'}
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // 5. MODAL E CRUD
+    function openModal() {
+      document.getElementById('rec-category').value = activeCategory;
+      document.getElementById('rec-date').valueAsDate = new Date();
+      document.getElementById('record-modal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('record-modal').classList.add('hidden');
+      document.getElementById('record-form').reset();
+    }
+
+    document.getElementById('record-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        user_id: currentUser.id,
+        category: document.getElementById('rec-category').value,
+        race_date: document.getElementById('rec-date').value,
+        title: document.getElementById('rec-title').value,
+        swim_seconds: parseTimeToSeconds(document.getElementById('rec-swim').value),
+        t1_seconds: parseTimeToSeconds(document.getElementById('rec-t1').value),
+        bike_seconds: parseTimeToSeconds(document.getElementById('rec-bike').value),
+        t2_seconds: parseTimeToSeconds(document.getElementById('rec-t2').value),
+        run_seconds: parseTimeToSeconds(document.getElementById('rec-run').value)
+      };
+
+      const { error } = await supabaseClient.from('race_records').insert(payload);
+      if (error) {
+        alert('Erro ao salvar: ' + error.message);
+        return;
+      }
+      closeModal();
+      selectCategory(payload.category);
+    });
+
+    async function deleteRecord(id) {
+      if (!confirm('Tem certeza que deseja excluir este tempo?')) return;
+      const { error } = await supabaseClient.from('race_records').delete().eq('id', id);
+      if (error) alert('Erro ao excluir: ' + error.message);
+      else loadRecords();
+    }
+
+    // 6. OBSERVADOR DE SESSÃO
+    supabaseClient.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        currentUser = session.user;
+        document.getElementById('auth-screen').classList.add('hidden');
+        document.getElementById('app-screen').classList.remove('hidden');
+        const displayName = currentUser.user_metadata?.name || currentUser.email;
+        document.getElementById('user-greeting').textContent = `Olá, ${displayName}`;
+        loadRecords();
+      } else {
+        currentUser = null;
+        document.getElementById('app-screen').classList.add('hidden');
+        document.getElementById('auth-screen').classList.remove('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
